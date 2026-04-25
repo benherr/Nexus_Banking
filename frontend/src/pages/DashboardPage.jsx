@@ -71,7 +71,8 @@ const DashboardPage = ({ user, onLogout }) => {
 
         {/* User Details */}
         <div className="glass-panel details-card">
-          <h3><UserIcon size={20}/> Account Details</h3>
+          <h3><Wallet size={20}/> Account Details</h3>
+          <div className="detail-row"><span>Account No</span> <strong className="text-primary font-mono">{user.accountnumber}</strong></div>
           <div className="detail-row"><span>Email</span> <strong>{user.customeremailid}</strong></div>
           <div className="detail-row"><span>Mobile</span> <strong>+91 {user.mobilenumber}</strong></div>
           <div className="detail-row"><span>Address</span> <strong>{user.customeraddress}</strong></div>
@@ -87,24 +88,32 @@ const DashboardPage = ({ user, onLogout }) => {
                 <tr>
                   <th>Date & Time</th>
                   <th>Type</th>
+                  <th>Details</th>
                   <th>Amount</th>
-                  <th>Closing Balance</th>
+                  <th>Balance</th>
                 </tr>
               </thead>
               <tbody>
                 {statement.length === 0 ? (
-                  <tr><td colSpan="4" className="text-center text-muted">No transactions yet.</td></tr>
+                  <tr><td colSpan="5" className="text-center text-muted">No transactions yet.</td></tr>
                 ) : (
                   statement.map(tx => (
                     <tr key={tx.transactionid}>
-                      <td>{tx.transactiondate} {tx.transactiontime}</td>
                       <td>
-                        <span className={`tx-badge ${tx.transactiontype ? tx.transactiontype.toLowerCase() : ''}`}>
+                        <div>{tx.transactiondate}</div>
+                        <div className="text-muted" style={{ fontSize: '0.85rem' }}>{tx.transactiontime}</div>
+                      </td>
+                      <td>
+                        <span className={`tx-badge ${tx.transactiontype ? tx.transactiontype.toLowerCase().replace(' ', '-') : ''}`}>
                           {tx.transactiontype}
                         </span>
                       </td>
-                      <td className={tx.transactiontype === 'Credit' ? 'text-success' : 'text-danger'}>
-                        {tx.transactiontype === 'Credit' ? '+' : '-'}₹{tx.transactionamount ? tx.transactionamount.toFixed(2) : '0.00'}
+                      <td className="font-mono text-muted" style={{ fontSize: '0.9rem' }}>
+                        {tx.transactiontype === 'Transfer Out' ? `To: ${tx.raccountnumber}` : 
+                         tx.transactiontype === 'Transfer In' ? `From: ${tx.raccountnumber}` : 'Self'}
+                      </td>
+                      <td className={tx.transactiontype?.includes('Credit') || tx.transactiontype === 'Transfer In' ? 'text-success' : 'text-danger'}>
+                        {tx.transactiontype?.includes('Credit') || tx.transactiontype === 'Transfer In' ? '+' : '-'}₹{tx.transactionamount ? tx.transactionamount.toFixed(2) : '0.00'}
                       </td>
                       <td>₹{tx.balanceamount ? tx.balanceamount.toFixed(2) : '0.00'}</td>
                     </tr>
@@ -118,10 +127,11 @@ const DashboardPage = ({ user, onLogout }) => {
 
       {modalType && (
         <TransactionModal 
-          type={modalType} 
+          isOpen={modalType !== null} 
           onClose={() => setModalType(null)} 
-          accountNumber={user.accountnumber}
-          onSuccess={fetchDashboardData}
+          type={modalType} 
+          accountNo={user.accountnumber} 
+          onComplete={fetchDashboardData} 
         />
       )}
     </div>

@@ -109,6 +109,7 @@ const AdminDashboardPage = ({ onAdminLogout }) => {
                   <th>Tx ID</th>
                   <th>Date & Time</th>
                   <th>Account</th>
+                  <th>Details</th>
                   <th>Type</th>
                   <th>Amount</th>
                 </tr>
@@ -117,11 +118,18 @@ const AdminDashboardPage = ({ onAdminLogout }) => {
                 {transactions.map(tx => (
                   <tr key={tx.transactionid}>
                     <td className="text-muted">#{tx.transactionid}</td>
-                    <td>{tx.transactiondate} {tx.transactiontime}</td>
+                    <td>
+                      <div>{tx.transactiondate}</div>
+                      <div className="text-muted" style={{ fontSize: '0.85rem' }}>{tx.transactiontime}</div>
+                    </td>
                     <td className="font-mono">{tx.accountnumber}</td>
-                    <td><span className={`tx-badge ${tx.transactiontype ? tx.transactiontype.toLowerCase() : ''}`}>{tx.transactiontype}</span></td>
-                    <td className={tx.transactiontype === 'Credit' ? 'text-success' : 'text-danger'}>
-                      ₹{(tx.transactionamount || 0).toFixed(2)}
+                    <td className="font-mono text-muted" style={{ fontSize: '0.9rem' }}>
+                      {tx.transactiontype === 'Transfer Out' ? `To: ${tx.raccountnumber}` : 
+                       tx.transactiontype === 'Transfer In' ? `From: ${tx.raccountnumber}` : 'Self'}
+                    </td>
+                    <td><span className={`tx-badge ${tx.transactiontype ? tx.transactiontype.toLowerCase().replace(' ', '-') : ''}`}>{tx.transactiontype}</span></td>
+                    <td className={tx.transactiontype?.includes('Credit') || tx.transactiontype === 'Transfer In' ? 'text-success' : 'text-danger'}>
+                      {tx.transactiontype?.includes('Credit') || tx.transactiontype === 'Transfer In' ? '+' : '-'}₹{(tx.transactionamount || 0).toFixed(2)}
                     </td>
                   </tr>
                 ))}
