@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const ADMIN_API_URL = 'http://localhost:8080/api/admin';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+const ADMIN_API_URL = `${API_BASE_URL}/api/admin`;
 
 export const adminApi = {
   login: async (email, pin) => {

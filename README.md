@@ -40,28 +40,50 @@ A full-stack, secure, digital banking platform. Built with a robust Spring Boot 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- JDK 17+
-- Node.js (v18+)
-- MySQL Server
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running.
 
-### 1. Database Setup
-1. Create a MySQL schema named `bank_management_system`.
-2. The `application.properties` uses `spring.jpa.hibernate.ddl-auto=update` to automatically build your schema upon initial run.
-3. Use the built-in seed script to generate sample data by navigating to:
-   `http://localhost:8080/api/admin/seed-kerala`
+### ⚡ Quick Start (Docker)
+The easiest way to run the entire system is using Docker Compose:
 
-### 2. Backend (Spring Boot)
-```bash
-cd Bank_Management_System
-mvn clean install
-mvn spring-boot:run
-```
-*The backend server will start on port 8080.*
+1. Clone this repository.
+2. Run the following command in the project root:
+   ```bash
+   docker-compose up --build
+   ```
+3. Access the applications:
+   - **Frontend:** [http://localhost](http://localhost)
+   - **Backend API:** [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
-### 3. Frontend (React)
-```bash
-cd frontend
-npm install
-npm run dev
-```
-*The React application will start on port 5173.*
+---
+
+## ☁️ Cloud Deployment (Production)
+
+Follow these steps to deploy the system live on the internet.
+
+### 1. Database (TiDB Cloud)
+- Create a free **Starter** instance on [TiDB Cloud](https://tidb.cloud/).
+- Note your **Host**, **Port (4000)**, **Username**, and **Password**.
+- In the TiDB SQL Editor, create the database:
+  ```sql
+  CREATE DATABASE bank_management_system_db;
+  ```
+
+### 2. Backend (Render.com)
+- Deploy your code as a **Web Service** on Render.
+- Set the **Root Directory** to `Bank_Management_System`.
+- Add these **Environment Variables**:
+  - `SPRING_DATASOURCE_URL`: `jdbc:mysql://<YOUR_HOST>:4000/bank_management_system_db?useSSL=true`
+  - `SPRING_DATASOURCE_USERNAME`: `<YOUR_USERNAME>`
+  - `SPRING_DATASOURCE_PASSWORD`: `<YOUR_PASSWORD>`
+
+### 3. Frontend (Vercel.com)
+- Deploy the repository to Vercel.
+- Set the **Root Directory** to `frontend`.
+- Add these **Environment Variables**:
+  - `VITE_API_URL`: (Your live Render backend URL ending in `/api/customers`)
+  - `VITE_ADMIN_API_URL`: (Your live Render backend URL ending in `/api/admin`)
+
+---
+
+## 🔒 Security Note
+This project uses auto-generated PINs and secure database-backed authentication. For production use, ensure all traffic is served over HTTPS and secret keys are stored in environment variables (already configured in this repository).
