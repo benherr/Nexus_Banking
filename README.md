@@ -36,7 +36,6 @@ Nexus Bank is a comprehensive digital banking solution. Built with a robust **Ja
 
 ### Modern Registration & Success Flow
 ![Registration Success](assets/success_ui.png)
-*Beautiful inline credential generation replacing traditional browser alerts.*
 
 ### Customer Dashboard
 ![Customer Dashboard](assets/dashboard.png)
@@ -90,10 +89,4 @@ This project is fully "Cloud-Ready" and is actively deployed using modern PaaS p
 
 ---
 
-## 🔑 Demo Access / Administration
 
-To test the **Admin Dashboard** in the live demo or your local setup:
-1. Navigate to `/admin`.
-2. Login with the seeded administrator credentials:
-   - **Email:** `admin@gmail.com`
-   - **PIN:** `1234`
